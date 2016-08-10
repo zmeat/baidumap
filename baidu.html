@@ -27,6 +27,10 @@
 		overflow: hidden;
 		background-color: #FAFAFC;
 		transform: translate(-50%, -50%);
+		-ms-transform:translate(-50%, -50%); 	/* IE 9 */
+		-moz-transform:translate(-50%, -50%); 	/* Firefox */
+		-webkit-transform:translate(-50%, -50%); /* Safari 和 Chrome */
+		-o-transform:translate(-50%, -50%);
 		padding: 5px 0px;
 	}
 	.F_cell{
@@ -121,10 +125,18 @@
 	    background-size: 11px 14px;
 	    vertical-align: middle;
 	}
-
+	.location-icon{
+		display: inline-block;
+	    width: 11px;
+	    height: 16px;
+	    margin-right: 3px;
+	    background: url(./images/location-icon.png) no-repeat;
+	    background-size: 11px 14px;
+	    vertical-align: middle;
+	}
 	.spanlevel
 	{
-	    color:Red;
+	    color:red;
 	    letter-spacing:1px;
 	   	overflow: hidden;
 	   	width: 75%;
@@ -186,18 +198,20 @@
 	.icon_menu a{
 		display: block;
 		text-decoration: none;
+		position: relative;
+		top: -8px;
 	}
 	.icon_menu > img{
 		width: 65px;
 		height: 45px;
-		margin: 0px auto;
 	}
 	.icon_menu a img {
-		width: 15px;
-		height: 15px;
+		width: 14px;
+		height: 14px;
 		float: right;
 		margin-right: 3px;
-		margin-top: 4px;
+		position: relative;
+		top: 4px;
 	}
 	.icon_menu span {
 		margin-left: 3px;
@@ -206,6 +220,7 @@
 		font-family: "微软雅黑";
 		color: red;
 		font-weight: 600;
+
 	}
 
 </style> 
@@ -318,7 +333,7 @@
                    <span id="udist" class="dist">
                    <i class="dist-icon"></i>0.00km
                    </span>
-                   <span id="ulevel" class="spanlevel">描述占位描述占位...</span>
+                   <span id="ulevel" class="spanlevel"><i class="location-icon"></i>描述占位描述占位...</span>
                    <input id="hidareacode" type="hidden" />
                    <input id="hidunitid" type="hidden" />
                    <input id="hidlat" type="hidden" />
@@ -382,7 +397,6 @@ function Search(el, src){
 
 	var options = {      
 	      onSearchComplete: function(results){    
-	      console.log(local.getStatus());
           	if (local.getStatus() == BMAP_STATUS_SUCCESS){      
                 // 判断状态是否正确      
                 var s = results.wr;
@@ -446,8 +460,8 @@ function addMarker(point, data){  // 创建图标对象
                 	var thpoint = new BMap.Point(markerArr[j].point.lng, markerArr[j].point.lat);
                 	var distance = ((map.getDistance(mpoint, thpoint))/1000).toFixed(2);
 
-                    $("#udist").html("<i class=\"dist-icon\"></i>" + distance + "km");
-                    $("#ulevel").text(markerArr[j].address);
+                    $("#udist").html();
+                    $("#ulevel").html("<i class=\"location-icon\"></i>" + markerArr[j].address + "km");
                     $("#utitle").text(markerArr[j].title);
                     $("#hidareacode").val(markerArr[j].city);
                     $("#hidlat").val(_marker.getPosition().lat);
