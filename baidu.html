@@ -460,8 +460,8 @@ function addMarker(point, data){  // 创建图标对象
                 	var thpoint = new BMap.Point(markerArr[j].point.lng, markerArr[j].point.lat);
                 	var distance = ((map.getDistance(mpoint, thpoint))/1000).toFixed(2);
 
-                    $("#udist").html();
-                    $("#ulevel").html("<i class=\"location-icon\"></i>" + markerArr[j].address + "km");
+                    $("#udist").html("<i class=\"dist-icon\"></i>" + distance + "km");
+                    $("#ulevel").html("<i class=\"location-icon\"></i>" + markerArr[j].address);
                     $("#utitle").text(markerArr[j].title);
                     $("#hidareacode").val(markerArr[j].city);
                     $("#hidlat").val(_marker.getPosition().lat);
