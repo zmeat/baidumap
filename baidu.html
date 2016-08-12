@@ -6,602 +6,197 @@
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no width=device-width" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
 <title>宁夏旅游地图</title>  
-<style type="text/css">
-	html,body{
-		width: 100%;
-		height: 100%;
-	}
-	*{
-		margin: 0px;
-		padding: 0px;
-	}
-	#container{height:100%}
-	.F_menu_box{
-		display: block;
-		position: fixed;
-		z-index: 3;
-		top: 21%;
-		left: 50%;
-		width: 95%;
-		border-radius: 5px;
-		overflow: hidden;
-		background-color: #FAFAFC;
-		transform: translate(-50%, -50%);
-		-ms-transform:translate(-50%, -50%); 	/* IE 9 */
-		-moz-transform:translate(-50%, -50%); 	/* Firefox */
-		-webkit-transform:translate(-50%, -50%); /* Safari 和 Chrome */
-		-o-transform:translate(-50%, -50%);
-		padding: 5px 0px;
-	}
-	.F_cell{
-		display: inline-block;
-		border-radius: 3px;
-		top: 0;
-		left: 0;
-		width: 23.8%;
-		text-decoration: none;
-		padding: 10px 0px;
-	}
-	.F_cell:hover{
-		background-color: rgba(0,0,0,0.1);
-	}
-	.F_cell:active{
-		background-color: rgba(0,0,0,0.3)
-	}
-	.F_cell .F_icon{
-		margin: 0 auto;
-		height: 28px;
-		width: 28px;
-		display: block;
-	}
-	.F_cell .F_icon img{
-		width: 100%;
-		height: 100%;
-		margin: 0px;
-	}
-	.F_cell p {
-		text-align: center;
-		display: block;
-		color: #333;
-		font-size: 14px;
-		margin-top: 5px
-	}
-	.F_mask{
-		position: fixed;
-		display: block;
-		width: 100%;
-		height: 100%;
-		background-color: rgba(0,0,0,0.6);
-		top: 0px;
-		left: 0px;
-		z-index: 2;
-	}
-	.F_hide{
-		display: none;
-	}
-
-/*===================================	*/
-	.title {
-	    font-size: 16px;
-	    color: #333;
-	    margin-bottom: 9px;
-	    text-align:left;
-	    margin-top:5px;
-	}
-
-	.other-info {
-	    height: 16px;
-	    line-height: 16px;
-	    white-space: nowrap;
-	    overflow: hidden;
-	    text-align:left;
-	}
-
-	.detail-link 
-	{
-	    display: inline-block;
-	    padding-top: 20px;
-	    background: url(http://s1.map.bdimg.com/mobile/simple/static/place/images/attention_58eb96c.png) center 0 no-repeat;
-	    background-size: 15px 15px;
-	    color: #4b8ff9!important;
-	    margin-top:-45px;
-	    float:right;
-	}
-
-	.dist {
-	    float: left;
-	    margin-right: 5px;
-	    padding: 0 5px 0 0;
-	    border-right: 1px solid #dadbdd;
-	    color: #848484!important;
-	}
-
-	.dist-icon {
-	    display: inline-block;
-	    width: 11px;
-	    height: 16px;
-	    margin-right: 3px;
-	    background: url(http://s1.map.bdimg.com/mobile/simple/static/place/images/dist_icon_57d5165.png) no-repeat;
-	    background-size: 11px 14px;
-	    vertical-align: middle;
-	}
-	.location-icon{
-		display: inline-block;
-	    width: 11px;
-	    height: 16px;
-	    margin-right: 3px;
-	    background: url(./images/location-icon.png) no-repeat;
-	    background-size: 11px 14px;
-	    vertical-align: middle;
-	}
-	.spanlevel
-	{
-	    color:red;
-	    letter-spacing:1px;
-	   	overflow: hidden;
-	   	width: 75%;
-	   	display: inline-block;
-	}
-
-	.icon {
-	    display: inline-block;
-	    font-family: mwa;
-	    font-weight: 400;
-	    font-style: normal;
-	    font-variant: normal;
-	    line-height: 1;
-	    text-transform: none;
-	    -webkit-font-smoothing: antialiased;
-	    font-size: 16px;
-	    width: 1em;
-	    height: 1em;
-	    color: inherit;
-	}
-	hr {
-		width: 75%;
-		margin: 2px auto;
-	}
-	.city_box > div{
-		line-height:20px;
-		padding:0 1%;
-	}
-	.city_box span {
-		display: inline-block;
-		border-right:1px solid #dadbdd;
-		margin:8px auto;
-		letter-spacing:2px;
-		width: 18.3%;
-		text-align: center;
-		border-radius: 3px;
-		font-family: "微软雅黑";
-		font-weight: 400;
-	}
-	.city_box span:active{
-		background-color: rgba(0,0,0,0.3);
-	}
-	.city_box span:hover {
-		background-color: rgba(0,0,0,0.1);
-	}
-	.city_box span:last-child{
-		border-right: none;
-	}
-	.active{
-		background-color: rgba(0,0,0,0.2);
-	}
-	.icon_menu{
-		background: #FAFAFC;
-		padding: 5px;
-		border-radius: 10px;
-		opacity: 0.9;
-
-	}
-	.icon_menu a{
-		display: block;
-		text-decoration: none;
-		position: relative;
-		top: -8px;
-	}
-	.icon_menu > img{
-		width: 65px;
-		height: 45px;
-	}
-	.icon_menu a img {
-		width: 14px;
-		height: 14px;
-		float: right;
-		margin-right: 3px;
-		position: relative;
-		top: 4px;
-	}
-	.icon_menu span {
-		margin-left: 3px;
-		line-height: 5px;
-		font-size: 15px;
-		font-family: "微软雅黑";
-		color: red;
-		font-weight: 600;
-
-	}
-
-</style> 
     <link type="text/css" href="./weui.css" rel="stylesheet">
+    <link type="text/css" href="./baidu.css" rel="stylesheet">
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=VeQlPcE6TGiCgphstKk6ppc3">
+	//v2.0版本的引用方式：src="http://api.map.baidu.com/api?v=2.0&ak=您的密钥"
+	//v1.4版本及以前版本的引用方式：src="http://api.map.baidu.com/api?v=1.4&key=您的密钥&callback=initialize"
+	//api.map.baidu.com/getscript?v=2.0&ak=VeQlPcE6TGiCgphstKk6ppc3&services=&t=20160804144823
+	</script>
+	<script type="text/javascript" src="./jquery.js"></script>
+	<script type="text/javascript" src="./doT.js"></script>  
+	<script type="text/javascript" src="./baidu.js"></script>
 </head>  
  
 <body> 
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=VeQlPcE6TGiCgphstKk6ppc3">
-//v2.0版本的引用方式：src="http://api.map.baidu.com/api?v=2.0&ak=您的密钥"
-//v1.4版本及以前版本的引用方式：src="http://api.map.baidu.com/api?v=1.4&key=您的密钥&callback=initialize"
-//api.map.baidu.com/getscript?v=2.0&ak=VeQlPcE6TGiCgphstKk6ppc3&services=&t=20160804144823
+	<!-- template start -->
+<script  id="interpolationtmpl"  type="text/template" charset="utf-8">
+	{{ if(it&&it.citys&&it.types){ }}
+		<div class="city_box" id="city_box">
+			{{ for (var i =0; i < it.citys.items.length; i++){ }}
+				{{if(a = 0){}}
+					<span class="last" data-city="{{= it.citys.items[i].name}}">{{= it.citys.items[i].name}}</span>
+				{{}else{}}
+					<span data-city="{{= it.citys.items[i].name}}">{{= it.citys.items[i].name}}</span>
+				{{}}}
+	        {{ } }}
+		</div>
+		<hr />
+		<div>
+			{{ for(var j = 0; j < it.types.items.length; j++) { }}
+			    <a href="javascript:;" class="F_cell">
+			        <div class="F_icon">
+			            <img src="{{= it.types.items[j].icon}}" alt="">
+			        </div>
+			        <p>
+			           	{{= it.types.items[j].name}}
+			        </p>
+			    </a>
+		    {{ } }}
+		</div>
+		{{ }else{ }}
+			<h2>暂无数据</h2>
+		{{ } }}
 </script>
-<script type="text/javascript" src="./jquery.js"></script>
+<!-- template end -->
 
-<div style="position:fixed;top: 3%;right:4%; z-index:1" class="icon_menu">
-    <img src="./images/xialacaidan.png">
-    <a>    
-    	<span id="current_city">宁夏</span>
-    	<img src="./images/pulldown.png" />
-    </a>
-</div>
-<div class="F_menu_box F_hide alert_box">
-	<div class="city_box" id="city_box">
-        <div>
-            <span data-city="银川">银川市</span>
-            <span data-city="吴忠">吴忠市</span>
-            <span data-city="固原">固原市</span>
-            <span data-city="中卫">中卫市</span>
-            <span data-city="石嘴山">石嘴山</span>
-        </div>
-	</div>
-	<hr />
-	<div>
-	    <a href="javascript:;" class="F_cell active">
-	        <div class="F_icon">
-	            <img src="./images/jingqu.png" alt="">
-	        </div>
-	        <p>
-	           	景区
-	        </p>
-	    </a>
-	    <a href="javascript:;" class="F_cell">
-	        <div class="F_icon">
-	            <img src="./images/fuwuqu.png" alt="">
-	        </div>
-	        <p>
-	            服务区
-	        </p>
-	    </a>
-	    <a href="javascript:;" class="F_cell">
-	        <div class="F_icon">
-	            <img src="./images/nongjiale.png" alt="">
-	        </div>
-	        <p>
-	            农家乐
-	        </p>
-	    </a>
-	    <a href="javascript:;" class="F_cell">
-	        <div class="F_icon">
-	            <img src="./images/gongce.png" alt="">
-	        </div>
-	        <p>
-	            公厕
-	        </p>
-	    </a>
-	    <a href="javascript:;" class="F_cell">
-	        <div class="F_icon">
-	            <img src="./images/jiudian.png" alt="">
-	        </div>
-	        <p>
-	            酒店
-	        </p>
-	    </a>
-	    <a href="javascript:;" class="F_cell">
-	        <div class="F_icon">
-	            <img src="./images/meishi.png" alt="">
-	        </div>
-	        <p>
-	           	美食
-	        </p>
-	    </a>
-	    <a href="javascript:;" class="F_cell">
-	        <div class="F_icon">
-	            <img src="./images/jiayouzhan.png" alt="">
-	        </div>
-	        <p>
-	            加油站
-	        </p>
-	    </a>
-	    <a href="javascript:;" class="F_cell">
-	        <div class="F_icon">
-	            <img src="./images/tingchechang.png" alt="">
-	        </div>
-	        <p>
-	            停车场
-	        </p>
+	<div style="position:fixed;top: 3%;right:4%; z-index:1" class="icon_menu">
+	    <img src="./images/xialacaidan.png">
+	    <a>    
+	    	<span id="current_city">宁夏</span>
+	    	<img src="./images/pulldown.png" />
 	    </a>
 	</div>
-</div>
-<div class="F_mask F_hide mask"></div>
 
-<div class="weui_dialog_alert F_hide" id="divalert">
-    <div style="z-index: 1;width: 100%;height: 100%;top: 0;left: 0;background: rgba(0, 0, 0, 0.6);">
-    </div>
-    <div class="weui_dialog" style="top:88%;width:95%">
-        <div class="weui_dialog_bd" id="alertNote">
-            <div class="info-box">
-               <p class="title"><strong id="utitle">占位占位</strong></p>
-               <div class="other-info">
-                   <span id="udist" class="dist">
-                   <i class="dist-icon"></i>0.00km
-                   </span>
-                   <span id="ulevel" class="spanlevel"><i class="location-icon"></i>描述占位描述占位...</span>
-                   <input id="hidareacode" type="hidden" />
-                   <input id="hidunitid" type="hidden" />
-                   <input id="hidlat" type="hidden" />
-                   <input id="hidlng" type="hidden" />
-               </div>
-            </div>
-            <div class="detail-link">详情
-            </div>
-        </div>
-        <div class="weui_dialog_ft" style="margin-top:10px;left:16px;width:91%;line-height:35px;">
-            <a onclick="Navigation()" href="javascript:;" class="weui_btn_dialog primary" style="color:#3b3b3b;font-size:14px;"><span><i class="icon">↱</i>到这去</span></a>
-        </div>
-    </div>
-</div>
-<div id="container"></div> 
-<script type="text/javascript">
-//初始化全局变量
-var map,
-	city = "宁夏",
-	mlat,
-	mlng,
-	markerArr = [],
-	iconsrc = "./images/jingqu.png";
+	<div class="F_menu_box F_hide alert_box" id="alert_menu_box">
+		<!-- 占位 -->
+	</div>
 
-function initMap(){
-	map = new BMap.Map("container");
-	var point = new BMap.Point(106.26667, 38.46667);
-	map.centerAndZoom(point, 13);
-	map.enableScrollWheelZoom();
-	map.setCurrentCity(city);
+	<div class="F_mask F_hide mask"></div>
 
-	//添加控件
-	//缩放控件
-	map.addControl(new BMap.NavigationControl({
-		type: BMAP_NAVIGATION_CONTROL_ZOOM,
-		offset: new BMap.Size(8, 20),
-		anchor: BMAP_ANCHOR_BOTTOM_RIGHT 
-	}));
-	//定位控件
-	map.addControl(new BMap.GeolocationControl({
-		offset: new BMap.Size(8, 40),
-		anchor: BMAP_ANCHOR_BOTTOM_LEFT 
-	}));
-}
-function showMenuBox(){
-	$(".alert_box").removeClass("F_hide");
-}
-function hideMenuBox(){
-	$(".alert_box").addClass("F_hide");
-}
-function showMask(){
-	$(".mask").removeClass("F_hide");
-}
-function hideMask(){
-	$(".mask").addClass("F_hide");
-}
-function Search(el, src){
-	map.clearOverlays();
-	iconsrc = src;//全局替换图标
-	markerArr = []; //清空数组
+	<div class="weui_dialog_alert F_hide" id="divalert">
+	    <div style="z-index: 1;width: 100%;height: 100%;top: 0;left: 0;background: rgba(0, 0, 0, 0.6);">
+	    </div>
+	    <div class="weui_dialog" style="top:88%;width:95%">
+	        <div class="weui_dialog_bd" id="alertNote">
+	            <div class="info-box">
+	               <p class="title"><strong id="utitle">占位占位</strong></p>
+	               <div class="other-info">
+	                   <span id="udist" class="dist">
+	                   <i class="dist-icon"></i>0.00km
+	                   </span>
+	                   <span id="ulevel" class="spanlevel"><i class="location-icon"></i>描述占位描述占位...</span>
+	                   <input id="hidareacode" type="hidden" />
+	                   <input id="hidunitid" type="hidden" />
+	                   <input id="hidlat" type="hidden" />
+	                   <input id="hidlng" type="hidden" />
+	               </div>
+	            </div>
+	            <div class="detail-link">详情
+	            </div>
+	        </div>
+	        <div class="weui_dialog_ft" style="margin-top:10px;left:16px;width:91%;line-height:35px;">
+	            <a onclick="Navigation()" href="javascript:;" class="weui_btn_dialog primary" style="color:#3b3b3b;font-size:14px;"><span><i class="icon">↱</i>到这去</span></a>
+	        </div>
+	    </div>
+	</div>
+	<div id="container"></div> 
 
-	var options = {      
-	      onSearchComplete: function(results){    
-          	if (local.getStatus() == BMAP_STATUS_SUCCESS){      
-                // 判断状态是否正确      
-                var s = results.wr;
-
-             	markerArr = markerArr.concat(s); //保存本次的搜索结果
-
-             	s.forEach(function(val){
-					addMarker(val.point, val);
-				});
-
-				addAreaPolyLine(city);
-          	}      
-	      }      
-	 };  
-
-	var local = new BMap.LocalSearch(map, options); 
-
-	if(city === "宁夏"){
-		var needSearchs = [
-			"银川",
-			"吴忠",
-			"石嘴山",
-			"固原",
-			"中卫"
-		];
-
-		needSearchs.forEach(function(val){
-			(function(_val){
-				local.searchNearby(el, _val);
-			})(val)
-		});
-	}else{
-		local.setLocation(city);
-		local.setPageCapacity(15);//设置每页返回的数量
-		local.search(el, {forceLocal:true});		
-	}
-	
-}
-
-function addMarker(point, data){  // 创建图标对象
-	var myIcon = new BMap.Icon(iconsrc, new BMap.Size(25, 25), {
-		size: new BMap.Size(25, 25), 
-		imageSize : new BMap.Size(25, 25),
-	    imageOffset: new BMap.Size(0, 0)   // 设置图片偏移 
-	});      
-	// 创建标注对象并添加到地图   
-	var marker = new BMap.Marker(point, {icon: myIcon, title: data.title});
-
-	map.addOverlay(marker);
-	(function(_marker){
-		_marker.addEventListener("click", function(e){    
-			var tar = e.point || e.target.point;
-
-			console.log("当前位置"+tar.lng+","+tar.lat);
-            for (var j = 0; j < markerArr.length; j++) {
-                if (markerArr[j].point.lng == _marker.getPosition().lng && markerArr[j].point.lat == _marker.getPosition().lat) {
-
-                	showMask();
-
-                	var mpoint = new BMap.Point(mlng, mlat);
-                	var thpoint = new BMap.Point(markerArr[j].point.lng, markerArr[j].point.lat);
-                	var distance = ((map.getDistance(mpoint, thpoint))/1000).toFixed(2);
-
-                    $("#udist").html("<i class=\"dist-icon\"></i>" + distance + "km");
-                    $("#ulevel").html("<i class=\"location-icon\"></i>" + markerArr[j].address);
-                    $("#utitle").text(markerArr[j].title);
-                    $("#hidareacode").val(markerArr[j].city);
-                    $("#hidlat").val(_marker.getPosition().lat);
-		 			$("#hidlng").val(_marker.getPosition().lng);	
-		 			$("#alertNote").attr("onClick", "showDetail('"+markerArr[j].detailUrl+"')");
-		 			$("#divalert").removeClass("F_hide");
-
-		 			//弹出信息窗
-		 			var info_win = new BMap.InfoWindow(markerArr[j].title, {width:200, height:50, maxWidth:500});
-					
-					info_win.enableCloseOnClick();
-					_marker.openInfoWindow(info_win);
-                }
-            }
-		});	
-
-	})(marker)
-}
-function addAreaPolyLine(name){
-	var points = [],prepoints = [];
-
-	getBoundary(name, function(data){
-		if(data && data.boundaries){
-			var prepoints = data.boundaries;	
-			var pointArray = [];
-
-			prepoints.forEach(function(val){
-				var polygon = new BMap.Polygon(
-					val,    
-					{strokeColor:"#ff0000", strokeWeight:2, strokeOpacity:1, fillOpacity:0, fillColor: ""}    
-				);
-
-				map.addOverlay(polygon);
-				pointArray = pointArray.concat(polygon.getPath());
-
-			});
-
-            map.setViewport(pointArray);    //调整视野
+<script>
+	var data = {
+		"citys": {
+			"perColumn": 4,
+			"items": [
+				{
+					"name": "银川市",
+					"index": 0
+				},
+				{
+					"name": "吴忠市",
+					"index": 1
+				},
+				{
+					"name": "固原市",
+					"index": 2
+				},
+				{
+					"name": "石嘴山市",
+					"index": 3
+				},
+				{
+					"name": "青铜峡市",
+					"index": 4
+				},
+				{
+					"name": "西吉市",
+					"index": 5
+				},
+				{
+					"name": "银川市",
+					"index": 0
+				},
+				{
+					"name": "中卫市",
+					"index": 1
+				},
+				{
+					"name": "灵武市",
+					"index": 2
+				}
+			]
+		},
+		"types": {
+			"perColumn":3,
+			"items":[
+				{
+					"name": "景区",
+					"icon": "./images/jingqu.png",
+					"index": 0
+				},
+				{
+					"name": "加油站",
+					"icon": "./images/jiayouzhan.png",
+					"index": 1
+				},
+				{
+					"name": "服务区",
+					"icon": "./images/fuwuqu.png",
+					"index": 2
+				},
+				{
+					"name": "酒店",
+					"icon": "./images/jiudian.png",
+					"index": 3
+				},
+				{
+					"name": "公厕",
+					"icon": "./images/gongce.png",
+					"index": 4
+				},
+				{
+					"name": "美食",
+					"icon": "./images/meishi.png",
+					"index": 5
+				},
+				{
+					"name": "农家乐",
+					"icon": "./images/nongjiale.png",
+					"index": 6
+				},
+				{
+					"name": "停车场",
+					"icon": "./images/jiayouzhan.png",
+					"index": 7
+				}		
+			]
 		}
-	});
-}
-//获取区域坐标的方法
-function getBoundary(name, cb){
-	var boundary = new BMap.Boundary();
+	};
 
-	boundary.get(name, cb);
-}
-function showDetail(url){
-	window.location.href = url;
-}
-function Navigation() {
-    var hr = "http://api.map.baidu.com/direction?origin=latlng:" + $("#hidlat").val() + "," + $("#hidlng").val()
-        + "|name:我的位置&destination=latlng:" + mlat + "," + mlng
-        + "|name:" + encodeURI($("#utitle").text()) + "&mode=driving&origin_region=" + $("#hidareacode").val()
-        + "&destination_region=" + $("#hidareacode").val()
-        + "&output=html&src=景区";
+	var originRate = {
+		"2" : "50",
+		"3" : "33.3",
+		"4" : "25",
+		"5" : "20",
+		"6" : "16.6"
+	};
+	var html = $("#interpolationtmpl").html();
+	var city_rate = originRate[data.citys.perColumn || 4] || 25;
+	var type_rate = originRate[data.types.perColumn || 4] || 25;
 
-  	console.log(hr);
-    window.location.href = hr;
-}
-function Geolocation(){
-	var geolocation = new BMap.Geolocation();
+	$("#alert_menu_box").html(doT.template(html)(data));
 
-	geolocation.getCurrentPosition(function(r){
-		if(this.getStatus() == BMAP_STATUS_SUCCESS){
-			console.log('您的位置：'+r.point.lng+','+r.point.lat);
-			mlat = r.point.lat;
-			mlng = r.point.lng;
-		}
-		else {
-			alert('failed'+this.getStatus());
-		}        
-	},{enableHighAccuracy: true})
-}
-
-function ipGeolocation(){
-	var myCity = new BMap.LocalCity();
-
-	myCity.get(function(result){
-		if(result){
-			console.log(result);
-			mlat = result.center.lat;
-			mlng = result.center.lng;
-		}
-	})
-}
-function changeCity(el){
-	city = el;
-	$("#current_city").html(city);
-
-	Search(el, iconsrc);
-}
-//===============================================================================
-	$(function(){
-		initMap();//初始化地图对象
-		Geolocation();//定位
-		if(!mlng || !mlat){//如果定位失败，换ip定位重试
-			ipGeolocation();
-		}
-		Search("景区", iconsrc);
-
-
-		//注册mask的点击事件
-		$(".mask").on('click', function(){
-			hideMask();
-			hideMenuBox();
-			$("#divalert").addClass("F_hide");
-		});
-
-		//注册memu菜单的点击事件
-		$(".icon_menu").on('click', function(){
-			showMask();
-			showMenuBox();
-		});
-
-		//注册alert_box的每个搜索条件的点击事件
-		$(".alert_box a").on("click", function(){
-			var text = $(this).find('p').text();
-			var imgsrc = $(this).find('img').attr('src');
-
-			$(this).parent().find("a").removeClass('active');
-			$(this).addClass('active');
-
-			Search(text, imgsrc);
-			hideMenuBox();
-			hideMask();
-		});
-
-		$("#city_box span").on("click", function(e){
-			var this_city = $(this).data("city");
-
-			$(this).parent().find("span").removeClass('active');
-			$(this).addClass('active');
-
-			changeCity(this_city);
-			hideMenuBox();
-			hideMask();
-		});
-
-	});
-</script>  
+	$(".F_cell").css({"width": type_rate+"%"});
+	$(".city_box span").css({"width": city_rate+"%"});
+</script>
 </body>  
 </html>
