@@ -1,0 +1,252 @@
+<!-- created by zmeat at 2016.8.5 -->
+
+<!DOCTYPE html>  
+<html>  
+<head>  
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no width=device-width" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" /> 
+<title>宁夏旅游地图</title>  
+    <link type="text/css" href="css/weui.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/aui.2.0.css">
+    <link type="text/css" href="css/baidu.css" rel="stylesheet">
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=VeQlPcE6TGiCgphstKk6ppc3">
+	//v2.0版本的引用方式：src="http://api.map.baidu.com/api?v=2.0&ak=您的密钥"
+	//v1.4版本及以前版本的引用方式：src="http://api.map.baidu.com/api?v=1.4&key=您的密钥&callback=initialize"
+	//api.map.baidu.com/getscript?v=2.0&ak=VeQlPcE6TGiCgphstKk6ppc3&services=&t=20160804144823
+	</script>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/doT.js"></script>
+	<script type="text/javascript" src="js/baidu.js"></script>
+</head>  
+ 
+<body> 
+	<!-- template start -->
+<script  id="interpolationtmpl"  type="text/template" charset="utf-8">
+	{{ if(it&&it.citys&&it.types){ }}
+		<div class="city_box" id="city_box">
+			{{ for (var i =0; i < it.citys.items.length; i++){ }}
+				{{if(a = 0){}}
+					<span class="last" data-city="{{= it.citys.items[i].name}}" data-sortId="{{= it.citys.items[i].sortID}}"
+                        onclick="City(this)"
+                    >
+                        {{= it.citys.items[i].name}}
+                    </span>
+				{{}else{}}
+					<span class="{{= i==0 ?  'active' : '' }}" data-city="{{= it.citys.items[i].name}}" 
+                        data-sortId="{{= it.citys.items[i].sortID}}"
+                        onclick="City(this)"
+                    >
+                        {{= it.citys.items[i].name}}
+                    </span>
+				{{}}}
+	        {{ } }}
+		</div>
+		<hr />
+		<div>
+			{{ for(var j = 0; j < it.types.items.length; j++) { }}
+			    <a href="javascript:;" class="F_cell {{= j == 0 ? 'active' : '' }}" data-sortAddressId="{{= it.types.items[j].sortAddressID}}"
+                    onclick="Type(this)"
+                >
+			        <div class="F_icon">
+			            <img src="{{= it.types.items[j].icon}}" alt="">
+			        </div>
+			        <p>
+			           	{{= it.types.items[j].name}}
+			        </p>
+			    </a>
+		    {{ } }}
+		</div>
+		{{ }else{ }}
+			<div style="display:block;width:100%;height:100%;background:#f7f7f7;text-align:center;">
+				<img src="images/data_lost.png" width="100" height="100" />
+				<p style="color:#a9b7b7;font-family:'楷体'">数据走丢了啊</p>
+			</div>
+		{{ } }}
+</script>
+<!-- template end -->
+	<div style="position:fixed;top: 3%;left:4%; z-index:1" class="icon_menu">
+	    <a>    
+	    	<span id="current_city">宁夏</span>
+	    	<span id="current_type">景区</span>
+	    </a>
+	</div>
+
+	<div style="position:fixed;top: 3%;right:4%; z-index:1" class="list_icon" onclick="$('#list_page').removeClass('F_hide');">
+	    <a>    
+	    	<span id="current_city" >列表</span>
+	    </a>
+	</div>
+
+	<div class="F_menu_box F_hide alert_box" id="alert_menu_box">
+		<div style="display:block;width:100%;height:100%;background:#f7f7f7;text-align:center;">
+			<img src="images/data_lost.png" width="100" height="100" />
+			<p style="color:#a9b7b7;font-family:'楷体'">数据走丢了啊</p>
+		</div>
+	</div>
+
+	<div class="F_mask F_hide mask"></div>
+
+	<div class="weui_dialog_alert F_hide" id="divalert">
+	    <div style="z-index: 1;width: 100%;height: 100%;top: 0;left: 0;background: rgba(0, 0, 0, 0.6);">
+	    </div>
+	    <div class="weui_dialog" style="top:88%;width:95%">
+	        <div class="weui_dialog_bd" id="alertNote">
+	            <div class="info-box">
+	               <p class="title"><strong id="utitle">占位占位</strong></p>
+	               <div class="other-info">
+	                   <span id="udist" class="dist">
+	                   <i class="zmeat-iconfont zmeat-iconfont-distance"></i>0.00km
+	                   </span>
+	                   <span id="ulevel" class="spanlevel">
+						   <i class="zmeat-iconfont zmeat-iconfont-position"></i>描述占位描述占位...</span>
+	                   <input id="hidareacode" type="hidden" />
+	                   <input id="hidunitid" type="hidden" />
+	                   <input id="hidlat" type="hidden" />
+	                   <input id="hidlng" type="hidden" />
+	               </div>	
+	            </div>
+	            <div class="detail-link">详情
+	            </div>
+	        </div>
+	        <div class="weui_dialog_ft" style="margin-top:10px;left:16px;width:91%;line-height:35px;" id="go_box">
+	            <a onclick="Navigation()" href="javascript:;"
+				   class="weui_btn_dialog primary" style="color:#3b3b3b;font-size:14px;"><span><i
+						class="zmeat-icon zmeat-iconfont zmeat-iconfont-go"></i>到这去</span></a>
+						
+	        </div>
+	    </div>
+	</div>
+
+
+    <div class="sort_box F_hide">
+    	<div id="scene" class="sort_item_box F_hide">
+    	    <div class="sort_item" data-val="0">全部</div>
+    		<div class="sort_item" data-val="1">AAA</div>
+    		<div class="sort_item" data-val="2">AAAA</div>
+    		<div class="sort_item" data-val="3">AAAAA</div>
+    	</div>
+    	<div id="hotel" class="sort_item_box F_hide">
+    	    <div class="sort_item" data-val="0">全部</div>
+    		<div class="sort_item" data-val="1">3星酒店</div>
+    		<div class="sort_item" data-val="2">4星酒店</div>
+    		<div class="sort_item" data-val="3">5星酒店</div>
+    	</div>
+    	<div id="gas" class="sort_item_box F_hide">
+    	    <div class="sort_item" data-val="0">全部</div>
+    		<div class="sort_item" data-val="1">中国石化</div>
+    		<div class="sort_item" data-val="2">中国石油</div>
+    	</div>
+    	<div id="park" class="sort_item_box F_hide">
+    	    <div class="sort_item" data-val="0">全部</div>
+    		<div class="sort_item" data-val="1">地下停车场</div>
+    		<div class="sort_item" data-val="2">地上停车场</div>
+    		<div class="sort_item" data-val="3">其他停车场</div>
+    	</div>
+    	<div id="wc" class="sort_item_box F_hide">
+    	    <div class="sort_item" data-val="0">不限距离</div>
+    		<div class="sort_item" data-val="1">离我最近</div>
+    	</div>
+   	</div>    
+
+
+	<!-- list area -->
+<script  id="interpolationtmpl2"  type="text/template" charset="utf-8">
+	{{ if(it.items && it.items.length){ }}
+	    	<ul>
+	    	{{ for(var i = 0; i<it.items.length; i++){ }}
+		    	{{if(i<=9){}}
+	    		{{ var item = it.items[i];}}
+				<li onclick="showToDetailBox({{! JSON.stringify(item)}}, {{= i}})">
+					<div class="item_title">
+						 <p>
+						 	<strong>
+						 		{{= i+1}}.{{= item.title}}
+						 	</strong>
+						 </p>
+					</div>
+					<div class="info_box">
+						<span class="distance"><i class="zmeat-iconfont zmeat-iconfont-distance"></i>
+						{{= item.distance ? (item.distance).toFixed(2) : 0 }}km</span>
+						<span class="level">{{= item.level ? item.level : ''}}</span>
+					</div>
+					{{if(item.phoneNumber){}}
+					<div class="item_tel">
+						<span>
+							<i class="aui-iconfont aui-icon-phone"></i>
+							{{= item.phoneNumber ? item.phoneNumber : ''}}
+						</span>
+					</div>
+					{{}}}
+					<div class="item_position">
+						<span>
+							<i class="zmeat-iconfont zmeat-iconfont-position"></i>
+							{{= item.address}}
+						</span>
+					</div>
+				</li>
+		    	{{ } }}
+	    	{{ } }}
+			</ul>	
+	{{ }else{ }}
+		<div style="display:block;width:100%;height:100%;background:#f7f7f7;text-align:center;">
+			<div style="position:relative;top:30%;">
+				<img src="images/data_lost.png" width="100" height="100" />
+				<p style="color:#a9b7b7;font-family:'楷体'">数据走丢了啊</p>				
+			</div>
+		</div>
+	{{	} }}
+
+</script>
+	<div id="list_page" class="F_hide">
+	    <header class="aui-bar aui-bar-nav" style="background:#ccc">
+	        <a class="aui-pull-left aui-btn" onclick="$('#list_page').addClass('F_hide');$('#map').removeClass('F_hide')">
+	            <span class="aui-iconfont aui-icon-back" style="color:#0062cc;font-family: '微软雅黑';"></span>
+	        </a>
+	        <div class="aui-title" id="province_scene" style="color:#0062cc;font-family: '微软雅黑';font-size:17px;" onclick="showMask();
+		showMenuBox();">宁夏-景区</div>
+	        <a class="aui-pull-right aui-btn">
+	            <span class="aui-iconfont"></span>
+	        </a>`
+	    </header>
+	    <div id="page_content">
+<!-- 	    	<ul>
+				<li>
+					<div class="item_title">
+						 <p>
+						 	<strong>
+						 		1.公共厕所
+						 	</strong>
+						 </p>
+					</div>
+					<div class="info_box">
+						<span class="distance"><i class="zmeat-iconfont zmeat-iconfont-distance"></i>35.35km</span>
+						<span class="level">AAA</span>
+					</div>
+					<div class="item_tel">
+						<span>
+							<i class="aui-iconfont aui-icon-phone"></i>
+							13167548393
+						</span>
+					</div>
+					<div class="item_position">
+						<span>
+							<i class="zmeat-iconfont zmeat-iconfont-position"></i>
+							北京路上海金凤区狮子狗蓝六队2223号院fdffffffffffffffffffffffff
+						</span>
+					</div>
+				</li>
+			</ul>	 -->
+	    </div>
+
+	</div>
+
+
+	<div id="container"></div> 	
+
+<script>
+</script>
+</body>  
+</html>
