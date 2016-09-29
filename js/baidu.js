@@ -1,6 +1,5 @@
 // created by zmeat
 
-
 //初始化全局变量
 var map,
     city,
@@ -8,6 +7,8 @@ var map,
     sortAddressID,
 	iconsrc,
     type,
+    level,
+    level_str,
 	mlat,
 	mlng,
 	markerArr = [],
@@ -15,7 +16,43 @@ var map,
 	PAGECOUNT = 10,
     CONFIG_URL = "http://wx.nxzhly.com/TravelMapBefore/GetCitysAndTypes?mid=21",
     SEARCH_URL = "http://wx.nxzhly.com/TravelMapBefore/GetContent",
-    GLOBAL_CONFIG;
+    GLOBAL_CONFIG,
+    typeMap = {
+        "1"  : 'scene',
+        "2" : 'gas',
+        "8" : 'park',
+        "5"   : 'hotel',
+        "4"   : 'wc'
+    },
+    levelMap = {
+            "1"  : {
+                "0" : '全部',
+                "1" : '3A级景区',
+                "2" : '4A级景区',
+                "3" : '5A级景区'
+            },
+            "2" : {
+                "0" : '全部',
+                "1" : '中国石化',
+                "2" : '中国石油 '
+            },
+            "8" : {
+                "0" : '全部',
+                "1" : '地下停车场',
+                "2" : '地上停车场',
+                "3" : '其他停车场'               
+            },
+            "5"   : {
+                "0" : '全部',
+                "1" : '3星酒店',
+                "2" : '4星酒店',
+                "3" : '5星酒店'
+            },
+            "4"   : {
+                "0" : '全部',
+                "1" : '离我最近'
+            }
+        };
 
 //创建弹出式选择框	
 function createAlertBox (data){
@@ -47,6 +84,7 @@ function createAlertBox (data){
 
 	$(".F_cell").css({"width": type_rate+"%"});
 	$(".city_box span").css({"width": city_rate+"%"});
+    $(".city_box span:nth-child("+data.citys.percolumn+")").css({"border-right": 'none'});
 
     //初始化全局变量
     GLOBAL_CONFIG = data;
@@ -56,10 +94,10 @@ function createAlertBox (data){
     iconsrc = data.types.items[0].icon;
     sortAddressID = data.types.items[0].sortAddressID;
     
-	$("#current_city").html(city);
-    $("#current_type").html(type);
+    $("#current").html(city+' | '+type+(level ? ' | '+level_str : ''));
 	initMap();//初始化地图对象
 }
+
 function sortByIndex(data){
    if(!data || !data.citys || !data.types) return console.log("数据格式错误");
 
@@ -80,7 +118,6 @@ function initMap(){
 
 	map.centerAndZoom(point, 13);
 	map.enableScrollWheelZoom();
-	//map.setCurrentCity("银川");
 
     map.setMapStyle({features: ["road", "point", "water", "land", "building"], style: "normal"});
 
@@ -124,7 +161,7 @@ function showMask(){
 function hideMask(){
 	$(".mask").addClass("F_hide").fadeIn();
 }
-function Search(level){
+function Search(){
 	map.clearOverlays();
 	markerArr = []; //清空数组
 
@@ -133,14 +170,14 @@ function Search(level){
             + (mlat ? "&beginLat= " + mlat + "&beginLng=" + mlng : '')
             + ( level ? "&level="+level : '' );
 
-
         _ajax(_thisurl, 'GET', {})
             .done(function(data){
                 if(!data ||!data.items) return console.log("data type error");
 
                 var html = $("#interpolationtmpl2").html();
                 $("#page_content").html(doT.template(html)(data));//渲染列表页
-                $("#province_scene").html(city+'—'+type);//替换标题
+                $("#province_scene").html(city+' | '+type+(level ? ' | '+level_str : ''));//替换标题
+                $("#current").html(city+' | '+type+(level ? ' | '+level_str : ''));
 
                 data.items.forEach(function(val){
                     var thispoint = new BMap.Point(+val.point.lng, +val.point.lat);
@@ -323,64 +360,60 @@ function ipGeolocation(){
 
 //点击每个类型搜索区域的回调方法
 function Type(that){
-	//注册alert_box的每个搜索条件的点击事件
-    type = $(that).find('p').text();
     sortAddressID = $(that).data("sortaddressid");
-    iconsrc = $(that).find('img').attr('src');
+    $(that).addClass('active').siblings().removeClass("active");
 
-   // $(that).parent().find("a").removeClass('active');
-    $(that).siblings().removeClass("active");
-    $(that).addClass('active');
-
-    $("#current_type").html(type);
-    
-    searchBefore ()
+    if(typeMap[sortAddressID]){
+        $('.item_box').addClass('F_hide');
+        $("#hr2").removeClass('F_hide');
+        $("#"+typeMap[sortAddressID]).removeClass('F_hide');
+    }else{
+        $("#hr2").addClass('F_hide');
+        $('.item_box').addClass('F_hide');
+    }
 }
 
 //点击每个城市搜索区域的回调方法
 function City(that){
-    city = $(that).data("city");
-    sortID = $(that).data("sortid");
-
-    //$(that).parent().find("span").removeClass('active');
-    $(that).siblings().removeClass("active");
-    $(that).addClass('active');
-
-	$("#current_city").html(city);
-
-    searchBefore ()
+    $(that).addClass('active').siblings().removeClass("active");
 }
+//sort_box 下的每个选项的点击事件
+function itemClick(that, e){
+    e.preventDefault();
+    e.stopPropagation();
+    $(that).addClass('active').siblings().removeClass('active');
+}
+function cancel(){
+    hideMask();
+    hideMenuBox();
+}
+function doSearch(that){
 
+    city = $(that).closest('.alert_box').find('.city_box .active').text().trim();  
+    sortID = $(that).closest('.alert_box').find('.city_box .active').data("sortid");
 
-function searchBefore (){
-    var typeMap = {
-        "1"  : 'scene',
-        "2" : 'gas',
-        "8" : 'park',
-        "5"   : 'hotel',
-        "4"   : 'wc'
-    };
+    type = $(that).closest('.alert_box').find('.type_box .active').text().trim();
+    sortAddressID = $(that).closest('.alert_box').find('.type_box .active').data("sortaddressid");
 
     if(typeMap[sortAddressID]){
-        $(".sort_box").removeClass('F_hide');
-        $("#"+typeMap[sortAddressID]).removeClass('F_hide').animate({"bottom": "3%"}, 300);
+        level = $("#"+typeMap[sortAddressID]).find('.active').data('val');
+        level_str = $("#"+typeMap[sortAddressID]).find('.active').text().trim();
     }else{
-        Search();
+        level = null;
+        level_str = null;
     }
 
-    setTimeout(function(){
-        hideMenuBox();
-        hideMask();
-    }, 200);
+    hideMask();
+    hideMenuBox();
+
+    Search()
+
 }
-
-
 //点击列表页跳转到弹出详情框的方法
 function showToDetailBox(item, index){
-    // $('#list_page').addClass('F_hide');
-    // $('#map').removeClass('F_hide');
 
     showMask();   
+
     var mpoint = new BMap.Point(mlng, mlat);
     var thpoint = new BMap.Point(item.point.lng, item.point.lat);
     var distance = ((map.getDistance(mpoint, thpoint))/1000).toFixed(2);
@@ -402,6 +435,20 @@ function showToDetailBox(item, index){
 }
 
 
+
+//将数字类型的level字段转换为方便战士的level_dispaly
+function levelFormat(level){
+    if(!sortAddressID){
+        return '';
+    }else if(!levelMap.hasOwnProperty(sortAddressID)){
+        return '';
+    }else{
+        return levelMap[sortAddressID][level] ? levelMap[sortAddressID][level] : '';
+    }
+
+}
+
+
 //===============================================================================
 $(function(){
 
@@ -417,7 +464,6 @@ $(function(){
         });       
     });
 
-
 	//注册mask的点击事件
 	$(".mask").on('click', function(){
 		hideMask();
@@ -430,36 +476,5 @@ $(function(){
 		showMask();
 		showMenuBox();
 	});
-
-    //注册sort_box 下的每个选项的点击事件
-    $(document).on('click', '.sort_box .sort_item_box .sort_item', function(e){
-        e.preventDefault();
-        e.stopPropagation();
-
-        var val = $(this).data('val'),
-            that = this;
-
-        Search((val ? val : ''));
-        setTimeout(function(){
-            $(".sort_box").addClass('F_hide');
-            $(that).parent().addClass('F_hide')
-                .animate({"bottom": "-15%"}, 300);         
-        }, 200);
-
-    });
-
-    //注册sort_box 遮盖层的点击事件
-    $(document).on('click', '.sort_box', function(e){
-        e.preventDefault();
-        e.stopPropagation();
-
-        Search();
-        setTimeout(function(){
-            $(".sort_box").addClass('F_hide')
-                .find('.sort_item_box').addClass('F_hide')
-                .animate({"bottom": "-15%"}, 300);         
-        }, 100);
-
-    });
 
 });

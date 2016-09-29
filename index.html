@@ -24,59 +24,96 @@
  
 <body> 
 	<!-- template start -->
-<script  id="interpolationtmpl"  type="text/template" charset="utf-8">
-	{{ if(it&&it.citys&&it.types){ }}
-		<div class="city_box" id="city_box">
-			{{ for (var i =0; i < it.citys.items.length; i++){ }}
-				{{if(a = 0){}}
-					<span class="last" data-city="{{= it.citys.items[i].name}}" data-sortId="{{= it.citys.items[i].sortID}}"
-                        onclick="City(this)"
-                    >
-                        {{= it.citys.items[i].name}}
-                    </span>
-				{{}else{}}
-					<span class="{{= i==0 ?  'active' : '' }}" data-city="{{= it.citys.items[i].name}}" 
-                        data-sortId="{{= it.citys.items[i].sortID}}"
-                        onclick="City(this)"
-                    >
-                        {{= it.citys.items[i].name}}
-                    </span>
-				{{}}}
-	        {{ } }}
-		</div>
-		<hr />
-		<div>
-			{{ for(var j = 0; j < it.types.items.length; j++) { }}
-			    <a href="javascript:;" class="F_cell {{= j == 0 ? 'active' : '' }}" data-sortAddressId="{{= it.types.items[j].sortAddressID}}"
-                    onclick="Type(this)"
-                >
-			        <div class="F_icon">
-			            <img src="{{= it.types.items[j].icon}}" alt="">
-			        </div>
-			        <p>
-			           	{{= it.types.items[j].name}}
-			        </p>
-			    </a>
-		    {{ } }}
-		</div>
-		{{ }else{ }}
-			<div style="display:block;width:100%;height:100%;background:#f7f7f7;text-align:center;">
-				<img src="images/data_lost.png" width="100" height="100" />
-				<p style="color:#a9b7b7;font-family:'楷体'">数据走丢了啊</p>
+	<script  id="interpolationtmpl"  type="text/template" charset="utf-8">
+		{{ if(it&&it.citys&&it.types){ }}
+			<div class="city_box" id="city_box">
+				{{ for (var i =0; i < it.citys.items.length; i++){ }}
+					{{if(a = 0){}}
+						<span class="last" data-city="{{= it.citys.items[i].name}}" data-sortId="{{= it.citys.items[i].sortID}}"
+	                        onclick="City(this)"
+	                    >
+	                        {{= it.citys.items[i].name}}
+	                    </span>
+					{{}else{}}
+						<span class="{{= i==0 ?  'active' : '' }}" data-city="{{= it.citys.items[i].name}}" 
+	                        data-sortId="{{= it.citys.items[i].sortID}}"
+	                        onclick="City(this)"
+	                    >
+	                        {{= it.citys.items[i].name}}
+	                    </span>
+					{{}}}
+		        {{ } }}
 			</div>
-		{{ } }}
-</script>
-<!-- template end -->
+			<hr />
+			<div class="type_box">
+				{{ for(var j = 0; j < it.types.items.length; j++) { }}
+				    <a href="javascript:;" class="F_cell {{= j == 0 ? 'active' : '' }}" data-sortAddressId="{{= it.types.items[j].sortAddressID}}"
+	                    onclick="Type(this)"
+	                >
+				        <div class="F_icon">
+				            <img src="{{= it.types.items[j].icon}}" alt="">
+				        </div>
+				        <p>
+				           	{{= it.types.items[j].name}}
+				        </p>
+				    </a>
+			    {{ } }}
+			</div>
+			<hr id="hr2" class="hr_top">
+			<div id="scene" class="item_box">
+				<span class="sort_item active" data-val="0" onclick="itemClick(this, event)">全部</span>
+	    		<span class="sort_item" data-val="1" onclick="itemClick(this, event)">3A级</span>
+	    		<span class="sort_item" data-val="2" onclick="itemClick(this, event)">4A级</span>
+	    		<span class="sort_item" data-val="3" onclick="itemClick(this, event)">5A级</span>
+	    	</div>
+	    	<div id="hotel" class="item_box F_hide">
+	    		<span class="sort_item active" data-val="0" onclick="itemClick(this, event)">全部</span>
+	    		<span class="sort_item" data-val="1" onclick="itemClick(this, event)">3星酒店</span>
+	    		<span class="sort_item" data-val="2" onclick="itemClick(this, event)">4星酒店</span>
+	    		<span class="sort_item" data-val="3" onclick="itemClick(this, event)">5星酒店</span>
+	    	</div>
+	    	<div id="gas" class="item_box F_hide">
+	    		<span class="sort_item active" data-val="0" onclick="itemClick(this, event)">全部</span>
+	    		<span class="sort_item" data-val="1" onclick="itemClick(this, event)">中国石化</span>
+	    		<span class="sort_item" data-val="2" onclick="itemClick(this, event)">中国石油</span>
+	    	</div>
+	    	<div id="park" class="item_box F_hide">
+	    		<span class="sort_item active" data-val="0" onclick="itemClick(this, event)">全部</span>
+	    		<span class="sort_item" data-val="1" onclick="itemClick(this, event)">地下停车场</span>
+	    		<span class="sort_item" data-val="2" onclick="itemClick(this, event)">地上停车场</span>
+	    		<span class="sort_item" data-val="3" onclick="itemClick(this, event)">其他停车场</span>
+	    	</div>
+	    	<div id="wc" class="item_box F_hide">
+	    		<span class="sort_item active" data-val="0" onclick="itemClick(this, event)">全部</span>
+	    		<span class="sort_item" data-val="1" onclick="itemClick(this, event)">离我最近</span>
+	    	</div>
+			
+			<hr class="" style="margin: 0px auto 10px auto;position:relative;top:5px;">
+	    	<div class="submit_box">
+	    		<div><span class="cancel" onclick="cancel()">取消</span></div>
+	    		<div><span class="sure" onclick="doSearch(this)">确定</span></div>
+	    	</div>
+			{{ }else{ }}
+				<div style="display:block;width:100%;height:100%;background:#f7f7f7;text-align:center;">
+					<img src="images/data_lost.png" width="100" height="100" />
+					<p style="color:#a9b7b7;font-family:'楷体'">数据走丢了啊</p>
+				</div>
+			{{ } }}
+	</script>
+	<!-- template end -->
+
+
+
+
 	<div style="position:fixed;top: 3%;left:4%; z-index:1" class="icon_menu">
 	    <a>    
-	    	<span id="current_city">宁夏</span>
-	    	<span id="current_type">景区</span>
-	    </a>
+	    	<span id="current">宁夏 | 景区</span>
+	    </a> 
 	</div>
 
 	<div style="position:fixed;top: 3%;right:4%; z-index:1" class="list_icon" onclick="$('#list_page').removeClass('F_hide');">
 	    <a>    
-	    	<span id="current_city" >列表</span>
+	    	<span>列表</span>
 	    </a>
 	</div>
 
@@ -121,124 +158,78 @@
 	</div>
 
 
-    <div class="sort_box F_hide">
-    	<div id="scene" class="sort_item_box F_hide">
-    	    <div class="sort_item" data-val="0">全部</div>
-    		<div class="sort_item" data-val="1">AAA</div>
-    		<div class="sort_item" data-val="2">AAAA</div>
-    		<div class="sort_item" data-val="3">AAAAA</div>
-    	</div>
-    	<div id="hotel" class="sort_item_box F_hide">
-    	    <div class="sort_item" data-val="0">全部</div>
-    		<div class="sort_item" data-val="1">3星酒店</div>
-    		<div class="sort_item" data-val="2">4星酒店</div>
-    		<div class="sort_item" data-val="3">5星酒店</div>
-    	</div>
-    	<div id="gas" class="sort_item_box F_hide">
-    	    <div class="sort_item" data-val="0">全部</div>
-    		<div class="sort_item" data-val="1">中国石化</div>
-    		<div class="sort_item" data-val="2">中国石油</div>
-    	</div>
-    	<div id="park" class="sort_item_box F_hide">
-    	    <div class="sort_item" data-val="0">全部</div>
-    		<div class="sort_item" data-val="1">地下停车场</div>
-    		<div class="sort_item" data-val="2">地上停车场</div>
-    		<div class="sort_item" data-val="3">其他停车场</div>
-    	</div>
-    	<div id="wc" class="sort_item_box F_hide">
-    	    <div class="sort_item" data-val="0">不限距离</div>
-    		<div class="sort_item" data-val="1">离我最近</div>
-    	</div>
-   	</div>    
+
+
+
+
+
 
 
 	<!-- list area -->
-<script  id="interpolationtmpl2"  type="text/template" charset="utf-8">
-	{{ if(it.items && it.items.length){ }}
-	    	<ul>
-	    	{{ for(var i = 0; i<it.items.length; i++){ }}
-		    	{{if(i<=9){}}
-	    		{{ var item = it.items[i];}}
-				<li onclick="showToDetailBox({{! JSON.stringify(item)}}, {{= i}})">
-					<div class="item_title">
-						 <p>
-						 	<strong>
-						 		{{= i+1}}.{{= item.title}}
-						 	</strong>
-						 </p>
-					</div>
-					<div class="info_box">
-						<span class="distance"><i class="zmeat-iconfont zmeat-iconfont-distance"></i>
-						{{= item.distance ? (item.distance).toFixed(2) : 0 }}km</span>
-						<span class="level">{{= item.level ? item.level : ''}}</span>
-					</div>
-					{{if(item.phoneNumber){}}
-					<div class="item_tel">
-						<span>
-							<i class="aui-iconfont aui-icon-phone"></i>
-							{{= item.phoneNumber ? item.phoneNumber : ''}}
-						</span>
-					</div>
-					{{}}}
-					<div class="item_position">
-						<span>
-							<i class="zmeat-iconfont zmeat-iconfont-position"></i>
-							{{= item.address}}
-						</span>
-					</div>
-				</li>
-		    	{{ } }}
-	    	{{ } }}
-			</ul>	
-	{{ }else{ }}
-		<div style="display:block;width:100%;height:100%;background:#f7f7f7;text-align:center;">
-			<div style="position:relative;top:30%;">
-				<img src="images/data_lost.png" width="100" height="100" />
-				<p style="color:#a9b7b7;font-family:'楷体'">数据走丢了啊</p>				
+	<!-- template2 start -->
+	<script  id="interpolationtmpl2"  type="text/template" charset="utf-8">
+		{{ if(it.items && it.items.length){ }}
+		    	<ul>
+		    	{{ for(var i = 0; i<it.items.length; i++){ }}
+		    		{{ var item = it.items[i];}}
+					<li onclick="showToDetailBox({{! JSON.stringify(item)}}, {{= i}})">
+						<div class="item_title">
+							 <p>
+							 	<strong>
+							 		{{= i+1}}.{{= item.title}}
+							 	</strong>
+							 </p>
+						</div>
+						<div class="info_box">
+							<span class="distance"><i class="zmeat-iconfont zmeat-iconfont-distance"></i>
+							{{= item.distance ? (item.distance).toFixed(2) : 0 }}km</span>
+							<span class="level">{{= item.level ? levelFormat(item.level) : ''}}</span>
+						</div>
+						{{if(item.phoneNumber){}}
+						<div class="item_tel">
+							<span>
+								<i class="aui-iconfont aui-icon-phone"></i>
+								{{= item.phoneNumber ? item.phoneNumber : ''}}
+							</span>
+						</div>
+						{{}}}
+						<div class="item_position">
+							<span>
+								<i class="zmeat-iconfont zmeat-iconfont-position"></i>
+								{{= item.address}}
+							</span>
+						</div>
+					</li>
+			    	{{ } }}
+				</ul>	
+		{{ }else{ }}
+			<div style="display:block;width:100%;height:100%;background:#f7f7f7;text-align:center;">
+				<div style="position:relative;top:30%;">
+					<img src="images/data_lost.png" width="100" height="100" />
+					<p style="color:#a9b7b7;font-family:'楷体'">数据走丢了啊</p>				
+				</div>
 			</div>
-		</div>
-	{{	} }}
+		{{	} }}
+		
+	</script>
+	<!-- template end -->
 
-</script>
+
+
+
 	<div id="list_page" class="F_hide">
 	    <header class="aui-bar aui-bar-nav" style="background:#ccc">
 	        <a class="aui-pull-left aui-btn" onclick="$('#list_page').addClass('F_hide');$('#map').removeClass('F_hide')">
 	            <span class="aui-iconfont aui-icon-back" style="color:#0062cc;font-family: '微软雅黑';"></span>
 	        </a>
-	        <div class="aui-title" id="province_scene" style="color:#0062cc;font-family: '微软雅黑';font-size:17px;" onclick="showMask();
-		showMenuBox();">宁夏-景区</div>
+	        <div class="aui-title" id="province_scene" style="color:#0062cc;font-family: '微软雅黑';font-size:16px;" onclick="showMask();
+		showMenuBox();">宁夏 | 景区</div>
 	        <a class="aui-pull-right aui-btn">
 	            <span class="aui-iconfont"></span>
-	        </a>`
+	        </a>
 	    </header>
 	    <div id="page_content">
-<!-- 	    	<ul>
-				<li>
-					<div class="item_title">
-						 <p>
-						 	<strong>
-						 		1.公共厕所
-						 	</strong>
-						 </p>
-					</div>
-					<div class="info_box">
-						<span class="distance"><i class="zmeat-iconfont zmeat-iconfont-distance"></i>35.35km</span>
-						<span class="level">AAA</span>
-					</div>
-					<div class="item_tel">
-						<span>
-							<i class="aui-iconfont aui-icon-phone"></i>
-							13167548393
-						</span>
-					</div>
-					<div class="item_position">
-						<span>
-							<i class="zmeat-iconfont zmeat-iconfont-position"></i>
-							北京路上海金凤区狮子狗蓝六队2223号院fdffffffffffffffffffffffff
-						</span>
-					</div>
-				</li>
-			</ul>	 -->
+			<!-- 占位 -->
 	    </div>
 
 	</div>
